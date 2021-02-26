@@ -250,7 +250,245 @@ function () {
 }();
 
 exports.CanvasView = CanvasView;
-},{"../sprites/Brick":"sprites/Brick.ts"}],"images/brick-red.png":[function(require,module,exports) {
+},{"../sprites/Brick":"sprites/Brick.ts"}],"sprites/Ball.ts":[function(require,module,exports) {
+"use strict";
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.Ball = void 0;
+
+var Ball =
+/** @class */
+function () {
+  function Ball(ballSize, position, speed, image) {
+    this.ballSize = ballSize;
+    this.position = position;
+    this.ballImage = new Image();
+    this.ballSize = ballSize;
+    this.position = position;
+    this.speed = {
+      x: speed,
+      y: -speed //so the ball goes up initially
+
+    };
+    this.ballImage.src = image;
+  }
+
+  Object.defineProperty(Ball.prototype, "width", {
+    // Getters
+    get: function get() {
+      return this.ballSize;
+    },
+    enumerable: false,
+    configurable: true
+  });
+  Object.defineProperty(Ball.prototype, "height", {
+    get: function get() {
+      return this.ballSize;
+    },
+    enumerable: false,
+    configurable: true
+  });
+  Object.defineProperty(Ball.prototype, "pos", {
+    get: function get() {
+      return this.position;
+    },
+    enumerable: false,
+    configurable: true
+  });
+  Object.defineProperty(Ball.prototype, "image", {
+    get: function get() {
+      return this.ballImage;
+    },
+    enumerable: false,
+    configurable: true
+  }); // Methods
+
+  Ball.prototype.changeYDirection = function () {
+    this.speed.y = -this.speed.y;
+  };
+
+  Ball.prototype.changeXDirection = function () {
+    this.speed.x = -this.speed.x;
+  };
+
+  Ball.prototype.moveBall = function () {
+    this.pos.x += this.speed.x, this.pos.y += this.speed.y;
+  };
+
+  return Ball;
+}();
+
+exports.Ball = Ball;
+},{}],"sprites/Paddle.ts":[function(require,module,exports) {
+"use strict";
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.Paddle = void 0;
+
+var Paddle =
+/** @class */
+function () {
+  function Paddle(speed, paddleWidth, paddleHeight, position, image) {
+    var _this = this;
+
+    this.speed = speed;
+    this.paddleWidth = paddleWidth;
+    this.paddleHeight = paddleHeight;
+    this.position = position;
+    this.paddleImage = new Image();
+
+    this.handleKeyUp = function (e) {
+      if (e.code === "ArrowLeft" || e.key === "ArrowLeft") _this.moveLeft = false;
+      if (e.code === "ArrowRight" || e.key === "ArrowRight") _this.moveRight = false;
+    };
+
+    this.handleKeyDown = function (e) {
+      if (e.code === "ArrowLeft" || e.key === "ArrowLeft") _this.moveLeft = true;
+      if (e.code === "ArrowRight" || e.key === "ArrowRight") _this.moveRight = true;
+    };
+
+    this.speed = speed;
+    this.paddleWidth = paddleWidth;
+    this.paddleHeight = paddleHeight;
+    this.position = position;
+    this.paddleImage.src = image;
+    this.moveLeft = false;
+    this.moveRight = false; //Event Listeners
+
+    document.addEventListener('keydown', this.handleKeyDown);
+    document.addEventListener('keyup', this.handleKeyUp);
+  }
+
+  Object.defineProperty(Paddle.prototype, "width", {
+    // Getters
+    get: function get() {
+      return this.paddleWidth;
+    },
+    enumerable: false,
+    configurable: true
+  });
+  Object.defineProperty(Paddle.prototype, "height", {
+    get: function get() {
+      return this.paddleHeight;
+    },
+    enumerable: false,
+    configurable: true
+  });
+  Object.defineProperty(Paddle.prototype, "pos", {
+    get: function get() {
+      return this.position;
+    },
+    enumerable: false,
+    configurable: true
+  });
+  Object.defineProperty(Paddle.prototype, "image", {
+    get: function get() {
+      return this.paddleImage;
+    },
+    enumerable: false,
+    configurable: true
+  });
+  Object.defineProperty(Paddle.prototype, "isMovingLeft", {
+    get: function get() {
+      return this.moveLeft;
+    },
+    enumerable: false,
+    configurable: true
+  });
+  Object.defineProperty(Paddle.prototype, "isMovingRight", {
+    get: function get() {
+      return this.moveRight;
+    },
+    enumerable: false,
+    configurable: true
+  });
+
+  Paddle.prototype.movePaddle = function () {
+    if (this.moveLeft) this.pos.x -= this.speed;
+    if (this.moveRight) this.pos.x += this.speed;
+  };
+
+  return Paddle;
+}();
+
+exports.Paddle = Paddle;
+},{}],"collision.ts":[function(require,module,exports) {
+"use strict";
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.Collision = void 0;
+
+var Collision =
+/** @class */
+function () {
+  function Collision() {} // Check ball collision with each brick
+
+
+  Collision.prototype.isCollidingWithBrick = function (ball, brick) {
+    if (ball.pos.x < brick.pos.x + brick.width && ball.pos.x + ball.pos.x > brick.pos.x && ball.pos.y < brick.pos.y + brick.height && ball.pos.y + ball.height > brick.pos.y) {
+      return true;
+    } else {
+      return false;
+    }
+  }; // Check ball collision with all bricks
+
+
+  Collision.prototype.isCollidingWithBricks = function (ball, bricks) {
+    var _this = this;
+
+    var colliding = false;
+    bricks.forEach(function (brick, i) {
+      if (_this.isCollidingWithBrick(ball, brick)) {
+        ball.changeYDirection();
+
+        if (brick.energy === 1) {
+          bricks.splice(i, 1);
+          console.log("Brick Destroyed");
+        } else {
+          brick.energy -= 1;
+        }
+
+        colliding = true;
+      }
+    });
+    return colliding;
+  }; //Check ball collision with wals and paddle
+
+
+  Collision.prototype.checkBallCollision = function (ball, paddle, view) {
+    // 1. Check ball collision with paddle
+    if (ball.pos.x + ball.width > paddle.pos.x && ball.pos.x < paddle.pos.x + paddle.width && ball.pos.y + ball.height === paddle.pos.y // if all this is true, then the ball has collided with the paddle
+    ) {
+        ball.changeYDirection();
+      } // 2. Check Ball Collision with walls
+    // Ball Movement x constraints
+
+
+    if (ball.pos.x > view.canvas.width - ball.width || ball.pos.x < 0) {
+      ball.changeXDirection();
+    } // 3. Check Ball movement y Constraints
+
+
+    if (ball.pos.y < 0) {
+      ball.changeYDirection();
+    }
+  };
+
+  return Collision;
+}();
+
+exports.Collision = Collision;
+},{}],"images/paddle.png":[function(require,module,exports) {
+module.exports = "/paddle.f48d929a.png";
+},{}],"images/ball.png":[function(require,module,exports) {
+module.exports = "/ball.96931fde.png";
+},{}],"images/brick-red.png":[function(require,module,exports) {
 module.exports = "/brick-red.c1be1822.png";
 },{}],"images/brick-blue.png":[function(require,module,exports) {
 module.exports = "/brick-blue.695b92f9.png";
@@ -377,8 +615,24 @@ function createBricks() {
 
 var _CanvasView = require("./view/CanvasView");
 
+var _Ball = require("./sprites/Ball");
+
+var _Paddle = require("./sprites/Paddle");
+
+var _collision = require("./collision");
+
+var _paddle = _interopRequireDefault(require("./images/paddle.png"));
+
+var _ball = _interopRequireDefault(require("./images/ball.png"));
+
+var _setup = require("./setup");
+
 var _helpers = require("./helpers");
 
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+// Images
+// Level and colors
 // Helpers
 var gameOver = false;
 var score = 0;
@@ -393,11 +647,28 @@ function setGameWin(view) {
   gameOver = false;
 }
 
-function gameLoop(view, bricks) {
+function gameLoop(view, bricks, paddle, ball, collision) {
   view.clear();
   view.drawBricks(bricks);
+  view.drawSprite(paddle);
+  view.drawSprite(ball); // Move Ball
+
+  ball.moveBall(); // Move paddle if it's inside playfield
+
+  if (paddle.isMovingLeft && paddle.pos.x > 0 || paddle.isMovingRight && paddle.pos.x < view.canvas.width - paddle.width) {
+    paddle.movePaddle();
+  }
+
+  collision.checkBallCollision(ball, paddle, view);
+  var COLLIDING_BRICK = collision.isCollidingWithBricks(ball, bricks);
+
+  if (COLLIDING_BRICK) {
+    score += 1;
+    view.drawScore(score);
+  }
+
   requestAnimationFrame(function () {
-    return gameLoop(view, bricks);
+    return gameLoop(view, bricks, paddle, ball, collision);
   });
 }
 
@@ -405,15 +676,28 @@ function startGame(view) {
   // Reset display
   score = 0;
   view.drawInfo('');
-  view.drawScore(0);
-  var BRICKS = (0, _helpers.createBricks)();
-  gameLoop(VIEW, BRICKS);
+  view.drawScore(0); // Create collision instance
+
+  var COLLISION = new _collision.Collision(); // Create All Bricks
+
+  var BRICKS = (0, _helpers.createBricks)(); // Create the ball
+
+  var BALL = new _Ball.Ball(_setup.BALL_SIZE, {
+    x: _setup.BALL_STARTX,
+    y: _setup.BALL_STARTY
+  }, _setup.BALL_SPEED, _ball.default); // Create the Paddle
+
+  var PADDLE = new _Paddle.Paddle(_setup.PADDLE_SPEED, _setup.PADDLE_WIDTH, _setup.PADDLE_HEIGHT, {
+    x: _setup.PADDLE_STARTX,
+    y: view.canvas.height - _setup.PADDLE_HEIGHT - 5
+  }, _paddle.default);
+  gameLoop(view, BRICKS, PADDLE, BALL, COLLISION);
 } // Create a new view
 
 
 var VIEW = new _CanvasView.CanvasView('#playField');
 VIEW.initStartButton(startGame);
-},{"./view/CanvasView":"view/CanvasView.ts","./helpers":"helpers.ts"}],"../node_modules/parcel-bundler/src/builtins/hmr-runtime.js":[function(require,module,exports) {
+},{"./view/CanvasView":"view/CanvasView.ts","./sprites/Ball":"sprites/Ball.ts","./sprites/Paddle":"sprites/Paddle.ts","./collision":"collision.ts","./images/paddle.png":"images/paddle.png","./images/ball.png":"images/ball.png","./setup":"setup.ts","./helpers":"helpers.ts"}],"../node_modules/parcel-bundler/src/builtins/hmr-runtime.js":[function(require,module,exports) {
 var global = arguments[3];
 var OVERLAY_ID = '__parcel__error__overlay__';
 var OldModule = module.bundle.Module;
@@ -441,7 +725,7 @@ var parent = module.bundle.parent;
 if ((!parent || !parent.isParcelRequire) && typeof WebSocket !== 'undefined') {
   var hostname = "" || location.hostname;
   var protocol = location.protocol === 'https:' ? 'wss' : 'ws';
-  var ws = new WebSocket(protocol + '://' + hostname + ':' + "53698" + '/');
+  var ws = new WebSocket(protocol + '://' + hostname + ':' + "62812" + '/');
 
   ws.onmessage = function (event) {
     checkedAssets = {};
