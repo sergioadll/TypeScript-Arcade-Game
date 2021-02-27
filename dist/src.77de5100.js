@@ -117,75 +117,7 @@ parcelRequire = (function (modules, cache, entry, globalName) {
   }
 
   return newRequire;
-})({"sprites/Brick.ts":[function(require,module,exports) {
-"use strict";
-
-Object.defineProperty(exports, "__esModule", {
-  value: true
-});
-exports.Brick = void 0;
-
-var Brick =
-/** @class */
-function () {
-  function Brick(brickWidth, brickHeight, position, brickEnergy, image) {
-    this.brickWidth = brickWidth;
-    this.brickHeight = brickHeight;
-    this.position = position;
-    this.brickEnergy = brickEnergy;
-    this.brickImage = new Image();
-    this.brickWidth = brickWidth;
-    this.brickHeight = brickHeight;
-    this.position = position;
-    this.brickEnergy = brickEnergy;
-    this.brickImage.src = image;
-  }
-
-  Object.defineProperty(Brick.prototype, "width", {
-    // Getters
-    get: function get() {
-      return this.brickWidth;
-    },
-    enumerable: false,
-    configurable: true
-  });
-  Object.defineProperty(Brick.prototype, "height", {
-    get: function get() {
-      return this.brickHeight;
-    },
-    enumerable: false,
-    configurable: true
-  });
-  Object.defineProperty(Brick.prototype, "pos", {
-    get: function get() {
-      return this.position;
-    },
-    enumerable: false,
-    configurable: true
-  });
-  Object.defineProperty(Brick.prototype, "image", {
-    get: function get() {
-      return this.brickImage;
-    },
-    enumerable: false,
-    configurable: true
-  });
-  Object.defineProperty(Brick.prototype, "energy", {
-    get: function get() {
-      return this.brickEnergy;
-    },
-    // Setters
-    set: function set(energy) {
-      this.brickEnergy = energy;
-    },
-    enumerable: false,
-    configurable: true
-  });
-  return Brick;
-}();
-
-exports.Brick = Brick;
-},{}],"view/CanvasView.ts":[function(require,module,exports) {
+})({"view/CanvasView.ts":[function(require,module,exports) {
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -193,9 +125,6 @@ Object.defineProperty(exports, "__esModule", {
 });
 exports.CanvasView = void 0;
 
-var _Brick = require("../sprites/Brick");
-
-// Types
 var CanvasView =
 /** @class */
 function () {
@@ -234,7 +163,7 @@ function () {
   CanvasView.prototype.drawSprite = function (brick) {
     var _a;
 
-    if (!_Brick.Brick) return;
+    if (!brick) return;
     (_a = this.context) === null || _a === void 0 ? void 0 : _a.drawImage(brick.image, brick.pos.x, brick.pos.y, brick.width, brick.height);
   };
 
@@ -250,7 +179,7 @@ function () {
 }();
 
 exports.CanvasView = CanvasView;
-},{"../sprites/Brick":"sprites/Brick.ts"}],"sprites/Ball.ts":[function(require,module,exports) {
+},{}],"sprites/Ball.ts":[function(require,module,exports) {
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -261,7 +190,7 @@ exports.Ball = void 0;
 var Ball =
 /** @class */
 function () {
-  function Ball(ballSize, position, speed, image) {
+  function Ball(speed, ballSize, position, image) {
     this.ballSize = ballSize;
     this.position = position;
     this.ballImage = new Image();
@@ -269,8 +198,7 @@ function () {
     this.position = position;
     this.speed = {
       x: speed,
-      y: -speed //so the ball goes up initially
-
+      y: -speed
     };
     this.ballImage.src = image;
   }
@@ -314,7 +242,8 @@ function () {
   };
 
   Ball.prototype.moveBall = function () {
-    this.pos.x += this.speed.x, this.pos.y += this.speed.y;
+    this.pos.x += this.speed.x;
+    this.pos.y += this.speed.y;
   };
 
   return Ball;
@@ -427,29 +356,27 @@ exports.Collision = void 0;
 var Collision =
 /** @class */
 function () {
-  function Collision() {} // Check ball collision with each brick
+  function Collision() {}
 
-
-  Collision.prototype.isCollidingWithBrick = function (ball, brick) {
-    if (ball.pos.x < brick.pos.x + brick.width && ball.pos.x + ball.pos.x > brick.pos.x && ball.pos.y < brick.pos.y + brick.height && ball.pos.y + ball.height > brick.pos.y) {
+  Collision.prototype.isCollidingBrick = function (ball, brick) {
+    if (ball.pos.x < brick.pos.x + brick.width && ball.pos.x + ball.width > brick.pos.x && ball.pos.y < brick.pos.y + brick.height && ball.pos.y + ball.height > brick.pos.y) {
       return true;
-    } else {
-      return false;
     }
-  }; // Check ball collision with all bricks
+
+    return false;
+  }; // Check ball collision with bricks
 
 
-  Collision.prototype.isCollidingWithBricks = function (ball, bricks) {
+  Collision.prototype.isCollidingBricks = function (ball, bricks) {
     var _this = this;
 
     var colliding = false;
     bricks.forEach(function (brick, i) {
-      if (_this.isCollidingWithBrick(ball, brick)) {
+      if (_this.isCollidingBrick(ball, brick)) {
         ball.changeYDirection();
 
         if (brick.energy === 1) {
           bricks.splice(i, 1);
-          console.log("Brick Destroyed");
         } else {
           brick.energy -= 1;
         }
@@ -458,21 +385,19 @@ function () {
       }
     });
     return colliding;
-  }; //Check ball collision with wals and paddle
-
+  };
 
   Collision.prototype.checkBallCollision = function (ball, paddle, view) {
     // 1. Check ball collision with paddle
-    if (ball.pos.x + ball.width > paddle.pos.x && ball.pos.x < paddle.pos.x + paddle.width && ball.pos.y + ball.height === paddle.pos.y // if all this is true, then the ball has collided with the paddle
-    ) {
-        ball.changeYDirection();
-      } // 2. Check Ball Collision with walls
-    // Ball Movement x constraints
+    if (ball.pos.x + ball.width > paddle.pos.x && ball.pos.x < paddle.pos.x + paddle.width && ball.pos.y + ball.height === paddle.pos.y) {
+      ball.changeYDirection();
+    } // 2. Check ball collision with walls
+    // Ball movement X constraints
 
 
     if (ball.pos.x > view.canvas.width - ball.width || ball.pos.x < 0) {
       ball.changeXDirection();
-    } // 3. Check Ball movement y Constraints
+    } // Ball movement Y constraints
 
 
     if (ball.pos.y < 0) {
@@ -568,9 +493,77 @@ var BRICK_ENERGY = {
 }; // prettier-ignore
 
 exports.BRICK_ENERGY = BRICK_ENERGY;
-var LEVEL = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 0, 0, 0, 2, 2, 2, 2, 2, 2, 2, 2, 0, 0, 3, 3, 3, 3, 3, 3, 3, 3, 0, 0, 0, 4, 4, 4, 4, 4, 4, 0, 0, 0, 0, 5, 5, 0, 0, 5, 5, 0, 0];
+var LEVEL = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 0, 0, 0, 2, 2, 2, 2, 2, 2, 2, 2, 0, 0, 3, 3, 3, 3, 3, 3, 3, 3, 0, 0, 0, 4, 4, 4, 4, 4, 4, 0, 0, 0, 0, 5, 1, 0, 0, 1, 5, 0, 0];
 exports.LEVEL = LEVEL;
-},{"./images/brick-red.png":"images/brick-red.png","./images/brick-blue.png":"images/brick-blue.png","./images/brick-green.png":"images/brick-green.png","./images/brick-yellow.png":"images/brick-yellow.png","./images/brick-purple.png":"images/brick-purple.png"}],"helpers.ts":[function(require,module,exports) {
+},{"./images/brick-red.png":"images/brick-red.png","./images/brick-blue.png":"images/brick-blue.png","./images/brick-green.png":"images/brick-green.png","./images/brick-yellow.png":"images/brick-yellow.png","./images/brick-purple.png":"images/brick-purple.png"}],"sprites/Brick.ts":[function(require,module,exports) {
+"use strict";
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.Brick = void 0;
+
+var Brick =
+/** @class */
+function () {
+  function Brick(brickWidth, brickHeight, position, brickEnergy, image) {
+    this.brickWidth = brickWidth;
+    this.brickHeight = brickHeight;
+    this.position = position;
+    this.brickEnergy = brickEnergy;
+    this.brickImage = new Image();
+    this.brickWidth = brickWidth;
+    this.brickHeight = brickHeight;
+    this.position = position;
+    this.brickEnergy = brickEnergy;
+    this.brickImage.src = image;
+  }
+
+  Object.defineProperty(Brick.prototype, "width", {
+    // Getters
+    get: function get() {
+      return this.brickWidth;
+    },
+    enumerable: false,
+    configurable: true
+  });
+  Object.defineProperty(Brick.prototype, "height", {
+    get: function get() {
+      return this.brickHeight;
+    },
+    enumerable: false,
+    configurable: true
+  });
+  Object.defineProperty(Brick.prototype, "pos", {
+    get: function get() {
+      return this.position;
+    },
+    enumerable: false,
+    configurable: true
+  });
+  Object.defineProperty(Brick.prototype, "image", {
+    get: function get() {
+      return this.brickImage;
+    },
+    enumerable: false,
+    configurable: true
+  });
+  Object.defineProperty(Brick.prototype, "energy", {
+    get: function get() {
+      return this.brickEnergy;
+    },
+    // Setters
+    set: function set(energy) {
+      this.brickEnergy = energy;
+    },
+    enumerable: false,
+    configurable: true
+  });
+  return Brick;
+}();
+
+exports.Brick = Brick;
+},{}],"helpers.ts":[function(require,module,exports) {
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -648,55 +641,62 @@ function setGameWin(view) {
 }
 
 function gameLoop(view, bricks, paddle, ball, collision) {
+  console.log('draw!');
   view.clear();
   view.drawBricks(bricks);
   view.drawSprite(paddle);
   view.drawSprite(ball); // Move Ball
 
-  ball.moveBall(); // Move paddle if it's inside playfield
+  ball.moveBall(); // Move paddle and check so it won't exit the playfield
 
   if (paddle.isMovingLeft && paddle.pos.x > 0 || paddle.isMovingRight && paddle.pos.x < view.canvas.width - paddle.width) {
     paddle.movePaddle();
   }
 
   collision.checkBallCollision(ball, paddle, view);
-  var COLLIDING_BRICK = collision.isCollidingWithBricks(ball, bricks);
+  var collidingBrick = collision.isCollidingBricks(ball, bricks);
 
-  if (COLLIDING_BRICK) {
+  if (collidingBrick) {
     score += 1;
     view.drawScore(score);
-  }
+  } // Game Over when ball leaves playField
 
+
+  if (ball.pos.y > view.canvas.height) gameOver = true; // If game won, set gameOver and display win
+
+  if (bricks.length === 0) return setGameWin(view); // Return if gameover and don't run the requestAnimationFrame
+
+  if (gameOver) return setGameOver(view);
   requestAnimationFrame(function () {
     return gameLoop(view, bricks, paddle, ball, collision);
   });
 }
 
 function startGame(view) {
-  // Reset display
+  // Reset displays
   score = 0;
   view.drawInfo('');
-  view.drawScore(0); // Create collision instance
+  view.drawScore(0); // Create a collision instance
 
-  var COLLISION = new _collision.Collision(); // Create All Bricks
+  var collision = new _collision.Collision(); // Create all bricks
 
-  var BRICKS = (0, _helpers.createBricks)(); // Create the ball
+  var bricks = (0, _helpers.createBricks)(); // Create a Ball
 
-  var BALL = new _Ball.Ball(_setup.BALL_SIZE, {
+  var ball = new _Ball.Ball(_setup.BALL_SPEED, _setup.BALL_SIZE, {
     x: _setup.BALL_STARTX,
     y: _setup.BALL_STARTY
-  }, _setup.BALL_SPEED, _ball.default); // Create the Paddle
+  }, _ball.default); // Create a Paddle
 
-  var PADDLE = new _Paddle.Paddle(_setup.PADDLE_SPEED, _setup.PADDLE_WIDTH, _setup.PADDLE_HEIGHT, {
+  var paddle = new _Paddle.Paddle(_setup.PADDLE_SPEED, _setup.PADDLE_WIDTH, _setup.PADDLE_HEIGHT, {
     x: _setup.PADDLE_STARTX,
     y: view.canvas.height - _setup.PADDLE_HEIGHT - 5
   }, _paddle.default);
-  gameLoop(view, BRICKS, PADDLE, BALL, COLLISION);
+  gameLoop(view, bricks, paddle, ball, collision);
 } // Create a new view
 
 
-var VIEW = new _CanvasView.CanvasView('#playField');
-VIEW.initStartButton(startGame);
+var view = new _CanvasView.CanvasView('#playField');
+view.initStartButton(startGame);
 },{"./view/CanvasView":"view/CanvasView.ts","./sprites/Ball":"sprites/Ball.ts","./sprites/Paddle":"sprites/Paddle.ts","./collision":"collision.ts","./images/paddle.png":"images/paddle.png","./images/ball.png":"images/ball.png","./setup":"setup.ts","./helpers":"helpers.ts"}],"../node_modules/parcel-bundler/src/builtins/hmr-runtime.js":[function(require,module,exports) {
 var global = arguments[3];
 var OVERLAY_ID = '__parcel__error__overlay__';
@@ -725,7 +725,7 @@ var parent = module.bundle.parent;
 if ((!parent || !parent.isParcelRequire) && typeof WebSocket !== 'undefined') {
   var hostname = "" || location.hostname;
   var protocol = location.protocol === 'https:' ? 'wss' : 'ws';
-  var ws = new WebSocket(protocol + '://' + hostname + ':' + "62812" + '/');
+  var ws = new WebSocket(protocol + '://' + hostname + ':' + "51099" + '/');
 
   ws.onmessage = function (event) {
     checkedAssets = {};

@@ -20,7 +20,7 @@ export class CanvasView {
     }
 
     clear():void {
-        this.context?.clearRect(0,0,this.canvas.width,this.canvas.height);
+        this.context?.clearRect(0,0,this.canvas.width, this.canvas.height);
     }
 
     initStartButton(startFunction: (view: CanvasView) =>void):void{
@@ -36,7 +36,7 @@ export class CanvasView {
     }
 
     drawSprite(brick: Brick | Paddle | Ball):void{
-        if (!Brick) return
+        if (!brick) return
 
         this.context?.drawImage(
             brick.image,

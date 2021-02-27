@@ -22,6 +22,7 @@ export function createBricks():Brick[] {
         if (element === 0) return acc;
 
         const nBrick = new Brick(BRICK_WIDTH,BRICK_HEIGHT, {x,y}, BRICK_ENERGY[element], BRICK_IMAGES[element])
-        return [...acc, nBrick]
+        return [...acc, nBrick];
+        
     }, [] as Brick[])
 }
