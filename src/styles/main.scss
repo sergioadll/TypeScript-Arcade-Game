@@ -38,7 +38,9 @@ canvas {
   width: $canvas-width;
 }
 
-#score,
+#score {
+  width: 150px;
+}
 #info {
   width: 380px;
 }

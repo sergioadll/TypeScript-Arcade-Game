@@ -108,12 +108,18 @@ function startGame(view: CanvasView) {
   gameLoop(view, bricks, paddle, ball, collision);
 }
 
-function changeLevel():void {
-  if (level + 1 < LEVEL.length) {
-    level++; view.drawInfo(`Press Start to play level ${level + 1}`)
+function changeLevel(change: string):void {
+  if (change=='levelUp'){
+
+    if (level + 1 < LEVEL.length) {
+      level++; view.drawInfo(`Press Start to play level ${level + 1}`)
+    } else {
+      view.drawInfo("This is the final level!")
+    }
+
   } else {
-    view.drawInfo("This is the final level!")
-  };
+    if(level>0){ level--; view.drawInfo(`Press Start to play level ${level + 1}`);}
+  }
     
   
 }

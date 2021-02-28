@@ -31,7 +31,10 @@ canvas {
   width: 1000px;
 }
 
-#score,
+#score {
+  width: 150px;
+}
+
 #info {
   width: 380px;
 }
