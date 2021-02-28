@@ -1,0 +1,44 @@
+$canvas-width: 1000px;
+$canvas-height: 650px;
+$primary-color: #272727;
+$secondary-color: #ff652f;
+$top-canvas-margin: 20px;
+
+body {
+  margin: 0;
+  background-color: $primary-color;
+}
+
+#main {
+  position: relative;
+  margin: $top-canvas-margin auto;
+  width: $canvas-width;
+  height: $canvas-height;
+  font-size: 32px;
+  font-family: Arial, Helvetica, sans-serif;
+  color: $secondary-color;
+}
+
+canvas {
+  position: absolute;
+  left: -4;
+  top: -5;
+  z-index: 10;
+  border-top: 1px solid $secondary-color;
+  border-left: 1px solid $secondary-color;
+  border-right: 1px solid $secondary-color;
+}
+
+#display {
+  position: absolute;
+  bottom: -10px;
+  // margin-top: 20px;
+  display: flex;
+  justify-content: space-between;
+  width: $canvas-width;
+}
+
+#score,
+#info {
+  width: 380px;
+}

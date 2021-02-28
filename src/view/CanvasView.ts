@@ -10,6 +10,7 @@ export class CanvasView {
     private scoreDisplay: HTMLObjectElement | null; // dive where we render the score
     private start: HTMLObjectElement | null; // start button
     private info: HTMLObjectElement | null; // info element
+    private levelButton: HTMLObjectElement | null; //Game level button
 
     constructor(canvasName:string){
         this.canvas = document.querySelector(canvasName) as HTMLCanvasElement;
@@ -17,10 +18,18 @@ export class CanvasView {
         this.scoreDisplay = document.querySelector('#score');
         this.start = document.querySelector('#start');
         this.info = document.querySelector('#info');
+        this.levelButton = document.querySelector('#level');
     }
 
     clear():void {
-        this.context?.clearRect(0,0,this.canvas.width, this.canvas.height);
+        this.context?.clearRect(0,0,this.canvas.width, this.canvas.height);       
+    }
+
+    initLevelButton(changeLevel: () =>void):void{
+        
+    this.levelButton?.addEventListener('click', ()=>changeLevel());
+       
+        
     }
 
     initStartButton(startFunction: (view: CanvasView) =>void):void{
@@ -28,7 +37,7 @@ export class CanvasView {
     }
 
     drawScore(score:number):void{
-        if (this.scoreDisplay) this.scoreDisplay.innerHTML = score.toString();
+        if (this.scoreDisplay) this.scoreDisplay.innerHTML = `Score: ${score.toString()}`;
     }
 
     drawInfo(text:string):void{
@@ -50,4 +59,5 @@ export class CanvasView {
     drawBricks(bricks: Brick[]):void{
         bricks.forEach(brick => this.drawSprite(brick));
     }
+
 }

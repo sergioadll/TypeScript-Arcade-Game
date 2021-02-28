@@ -117,7 +117,79 @@ parcelRequire = (function (modules, cache, entry, globalName) {
   }
 
   return newRequire;
-})({"view/CanvasView.ts":[function(require,module,exports) {
+})({"../node_modules/parcel-bundler/src/builtins/bundle-url.js":[function(require,module,exports) {
+var bundleURL = null;
+
+function getBundleURLCached() {
+  if (!bundleURL) {
+    bundleURL = getBundleURL();
+  }
+
+  return bundleURL;
+}
+
+function getBundleURL() {
+  // Attempt to find the URL of the current script and use that as the base URL
+  try {
+    throw new Error();
+  } catch (err) {
+    var matches = ('' + err.stack).match(/(https?|file|ftp|chrome-extension|moz-extension):\/\/[^)\n]+/g);
+
+    if (matches) {
+      return getBaseURL(matches[0]);
+    }
+  }
+
+  return '/';
+}
+
+function getBaseURL(url) {
+  return ('' + url).replace(/^((?:https?|file|ftp|chrome-extension|moz-extension):\/\/.+)\/[^/]+$/, '$1') + '/';
+}
+
+exports.getBundleURL = getBundleURLCached;
+exports.getBaseURL = getBaseURL;
+},{}],"../node_modules/parcel-bundler/src/builtins/css-loader.js":[function(require,module,exports) {
+var bundle = require('./bundle-url');
+
+function updateLink(link) {
+  var newLink = link.cloneNode();
+
+  newLink.onload = function () {
+    link.remove();
+  };
+
+  newLink.href = link.href.split('?')[0] + '?' + Date.now();
+  link.parentNode.insertBefore(newLink, link.nextSibling);
+}
+
+var cssTimeout = null;
+
+function reloadCSS() {
+  if (cssTimeout) {
+    return;
+  }
+
+  cssTimeout = setTimeout(function () {
+    var links = document.querySelectorAll('link[rel="stylesheet"]');
+
+    for (var i = 0; i < links.length; i++) {
+      if (bundle.getBaseURL(links[i].href) === bundle.getBundleURL()) {
+        updateLink(links[i]);
+      }
+    }
+
+    cssTimeout = null;
+  }, 50);
+}
+
+module.exports = reloadCSS;
+},{"./bundle-url":"../node_modules/parcel-bundler/src/builtins/bundle-url.js"}],"styles/main.scss":[function(require,module,exports) {
+var reloadCSS = require('_css_loader');
+
+module.hot.dispose(reloadCSS);
+module.hot.accept(reloadCSS);
+},{"_css_loader":"../node_modules/parcel-bundler/src/builtins/css-loader.js"}],"view/CanvasView.ts":[function(require,module,exports) {
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -134,12 +206,21 @@ function () {
     this.scoreDisplay = document.querySelector('#score');
     this.start = document.querySelector('#start');
     this.info = document.querySelector('#info');
+    this.levelButton = document.querySelector('#level');
   }
 
   CanvasView.prototype.clear = function () {
     var _a;
 
     (_a = this.context) === null || _a === void 0 ? void 0 : _a.clearRect(0, 0, this.canvas.width, this.canvas.height);
+  };
+
+  CanvasView.prototype.initLevelButton = function (changeLevel) {
+    var _a;
+
+    (_a = this.levelButton) === null || _a === void 0 ? void 0 : _a.addEventListener('click', function () {
+      return changeLevel();
+    });
   };
 
   CanvasView.prototype.initStartButton = function (startFunction) {
@@ -153,7 +234,7 @@ function () {
   };
 
   CanvasView.prototype.drawScore = function (score) {
-    if (this.scoreDisplay) this.scoreDisplay.innerHTML = score.toString();
+    if (this.scoreDisplay) this.scoreDisplay.innerHTML = "Score: " + score.toString();
   };
 
   CanvasView.prototype.drawInfo = function (text) {
@@ -493,7 +574,7 @@ var BRICK_ENERGY = {
 }; // prettier-ignore
 
 exports.BRICK_ENERGY = BRICK_ENERGY;
-var LEVEL = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 0, 0, 0, 2, 2, 2, 2, 2, 2, 2, 2, 0, 0, 3, 3, 3, 3, 3, 3, 3, 3, 0, 0, 0, 4, 4, 4, 4, 4, 4, 0, 0, 0, 0, 5, 1, 0, 0, 1, 5, 0, 0];
+var LEVEL = [[0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 0, 0, 0, 2, 2, 2, 2, 2, 2, 2, 2, 0, 0, 3, 3, 3, 3, 3, 3, 3, 3, 0, 0, 0, 4, 4, 4, 4, 4, 4, 0, 0, 0, 0, 5, 1, 0, 0, 1, 5, 0, 0], [0, 0, 0, 5, 5, 5, 5, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 2, 2, 2, 2, 2, 2, 2, 2, 0, 0, 3, 3, 0, 0, 0, 0, 3, 3, 0, 0, 0, 4, 4, 4, 4, 4, 4, 0, 0, 0, 0, 0, 0, 1, 1, 0, 0, 0, 0], [1, 2, 2, 5, 5, 5, 5, 2, 2, 5, 2, 2, 1, 2, 2, 2, 2, 1, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 3, 3, 2, 2, 2, 2, 3, 3, 2, 2, 2, 4, 4, 4, 4, 4, 4, 2, 2, 2, 2, 2, 2, 1, 1, 2, 2, 2, 2], [1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 2, 1, 1, 1, 1, 2, 0, 1, 1, 2, 2, 2, 5, 5, 2, 2, 2, 1, 1, 3, 0, 3, 3, 3, 3, 0, 3, 1, 1, 0, 4, 4, 1, 1, 4, 4, 0, 1, 1, 0, 1, 1, 0, 0, 1, 1, 0, 1]];
 exports.LEVEL = LEVEL;
 },{"./images/brick-red.png":"images/brick-red.png","./images/brick-blue.png":"images/brick-blue.png","./images/brick-green.png":"images/brick-green.png","./images/brick-yellow.png":"images/brick-yellow.png","./images/brick-purple.png":"images/brick-purple.png"}],"sprites/Brick.ts":[function(require,module,exports) {
 "use strict";
@@ -589,13 +670,15 @@ var __spreadArrays = void 0 && (void 0).__spreadArrays || function () {
   return r;
 };
 
-function createBricks() {
-  return _setup.LEVEL.reduce(function (acc, element, i) {
-    var row = Math.floor((i + 1) / _setup.STAGE_COLS);
+function createBricks(level) {
+  return _setup.LEVEL[level].reduce(function (acc, element, i) {
+    if (element === 0) return acc;
+    var row = Math.floor((i + 0.99999) / _setup.STAGE_COLS); // if index = 9, then row must be 0, not 1.
+    //if ((i+1)%10) row= row-1; other possible solution
+
     var col = i % _setup.STAGE_COLS;
     var x = _setup.STAGE_PADDING + col * (_setup.BRICK_WIDTH + _setup.BRICK_PADDING);
     var y = _setup.STAGE_PADDING + row * (_setup.BRICK_HEIGHT + _setup.BRICK_PADDING);
-    if (element === 0) return acc;
     var nBrick = new _Brick.Brick(_setup.BRICK_WIDTH, _setup.BRICK_HEIGHT, {
       x: x,
       y: y
@@ -605,6 +688,8 @@ function createBricks() {
 }
 },{"./sprites/Brick":"sprites/Brick.ts","./setup":"setup.ts"}],"index.ts":[function(require,module,exports) {
 "use strict";
+
+require("./styles/main");
 
 var _CanvasView = require("./view/CanvasView");
 
@@ -629,6 +714,7 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
 // Helpers
 var gameOver = false;
 var score = 0;
+var level = 0;
 
 function setGameOver(view) {
   view.drawInfo('Game Over!');
@@ -641,7 +727,6 @@ function setGameWin(view) {
 }
 
 function gameLoop(view, bricks, paddle, ball, collision) {
-  console.log('draw!');
   view.clear();
   view.drawBricks(bricks);
   view.drawSprite(paddle);
@@ -680,7 +765,7 @@ function startGame(view) {
 
   var collision = new _collision.Collision(); // Create all bricks
 
-  var bricks = (0, _helpers.createBricks)(); // Create a Ball
+  var bricks = (0, _helpers.createBricks)(level); // Create a Ball
 
   var ball = new _Ball.Ball(_setup.BALL_SPEED, _setup.BALL_SIZE, {
     x: _setup.BALL_STARTX,
@@ -692,12 +777,24 @@ function startGame(view) {
     y: view.canvas.height - _setup.PADDLE_HEIGHT - 5
   }, _paddle.default);
   gameLoop(view, bricks, paddle, ball, collision);
+}
+
+function changeLevel() {
+  if (level + 1 < _setup.LEVEL.length) {
+    level++;
+    view.drawInfo("Press Start to play level " + (level + 1));
+  } else {
+    view.drawInfo("This is the final level!");
+  }
+
+  ;
 } // Create a new view
 
 
 var view = new _CanvasView.CanvasView('#playField');
+view.initLevelButton(changeLevel);
 view.initStartButton(startGame);
-},{"./view/CanvasView":"view/CanvasView.ts","./sprites/Ball":"sprites/Ball.ts","./sprites/Paddle":"sprites/Paddle.ts","./collision":"collision.ts","./images/paddle.png":"images/paddle.png","./images/ball.png":"images/ball.png","./setup":"setup.ts","./helpers":"helpers.ts"}],"../node_modules/parcel-bundler/src/builtins/hmr-runtime.js":[function(require,module,exports) {
+},{"./styles/main":"styles/main.scss","./view/CanvasView":"view/CanvasView.ts","./sprites/Ball":"sprites/Ball.ts","./sprites/Paddle":"sprites/Paddle.ts","./collision":"collision.ts","./images/paddle.png":"images/paddle.png","./images/ball.png":"images/ball.png","./setup":"setup.ts","./helpers":"helpers.ts"}],"../node_modules/parcel-bundler/src/builtins/hmr-runtime.js":[function(require,module,exports) {
 var global = arguments[3];
 var OVERLAY_ID = '__parcel__error__overlay__';
 var OldModule = module.bundle.Module;
@@ -725,7 +822,7 @@ var parent = module.bundle.parent;
 if ((!parent || !parent.isParcelRequire) && typeof WebSocket !== 'undefined') {
   var hostname = "" || location.hostname;
   var protocol = location.protocol === 'https:' ? 'wss' : 'ws';
-  var ws = new WebSocket(protocol + '://' + hostname + ':' + "51099" + '/');
+  var ws = new WebSocket(protocol + '://' + hostname + ':' + "61300" + '/');
 
   ws.onmessage = function (event) {
     checkedAssets = {};

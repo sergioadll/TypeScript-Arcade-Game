@@ -5,7 +5,7 @@
     "lib": ["ESNext", "DOM"],
     "jsx": "react",
     "sourceMap": true,
-    "strict": true,
+    "strict": false,
     "moduleResolution": "node",
     "baseUrl": "./src",
     "paths": {

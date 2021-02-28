@@ -1,3 +1,5 @@
+import './styles/main'
+
 import { CanvasView } from './view/CanvasView';
 import { Ball } from './sprites/Ball';
 import { Brick } from './sprites/Brick';
@@ -8,6 +10,7 @@ import PADDLE_IMAGE from './images/paddle.png';
 import BALL_IMAGE from './images/ball.png';
 // Level and colors
 import {
+  LEVEL,
   PADDLE_SPEED,
   PADDLE_WIDTH,
   PADDLE_HEIGHT,
@@ -22,6 +25,7 @@ import { createBricks } from './helpers';
 
 let gameOver = false;
 let score = 0;
+let level = 0;
 
 function setGameOver(view: CanvasView) {
   view.drawInfo('Game Over!');
@@ -40,7 +44,6 @@ function gameLoop(
   ball: Ball,
   collision: Collision
 ) {
-  console.log('draw!');
   view.clear();
   view.drawBricks(bricks);
   view.drawSprite(paddle);
@@ -82,7 +85,7 @@ function startGame(view: CanvasView) {
   // Create a collision instance
   const collision = new Collision();
   // Create all bricks
-  const bricks = createBricks();
+  const bricks = createBricks(level);
   // Create a Ball
   const ball = new Ball(
     BALL_SPEED,
@@ -105,6 +108,16 @@ function startGame(view: CanvasView) {
   gameLoop(view, bricks, paddle, ball, collision);
 }
 
+function changeLevel():void {
+  if (level + 1 < LEVEL.length) {
+    level++; view.drawInfo(`Press Start to play level ${level + 1}`)
+  } else {
+    view.drawInfo("This is the final level!")
+  };
+    
+  
+}
 // Create a new view
 const view = new CanvasView('#playField');
+view.initLevelButton(changeLevel);
 view.initStartButton(startGame);
