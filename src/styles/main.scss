@@ -2,7 +2,7 @@ $canvas-width: 1000px;
 $canvas-height: 650px;
 $primary-color: #272727;
 $secondary-color: #ff652f;
-$top-canvas-margin: 20px;
+$top-canvas-margin: 50px;
 
 body {
   margin: 0;
@@ -43,4 +43,20 @@ canvas {
 }
 #info {
   width: 380px;
+}
+.level {
+  width: 120px;
+  color: $secondary-color;
+  border-color: $secondary-color;
+  &:hover {
+    color: $primary-color;
+    background-color: $secondary-color;
+    border: none;
+  }
+  &:focus {
+    box-shadow: none;
+  }
+  :active {
+    box-shadow: none;
+  }
 }

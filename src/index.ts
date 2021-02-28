@@ -26,7 +26,7 @@ import { createBricks } from './helpers';
 let gameOver = false;
 let score = 0;
 let level = 0;
-
+let animationId;
 function setGameOver(view: CanvasView) {
   view.drawInfo('Game Over!');
   gameOver = false;
@@ -69,12 +69,12 @@ function gameLoop(
 
   // Game Over when ball leaves playField
   if (ball.pos.y > view.canvas.height) gameOver = true;
-  // If game won, set gameOver and display win
+  // If game is won, set gameOver and display win
   if (bricks.length === 0) return setGameWin(view);
   // Return if gameover and don't run the requestAnimationFrame
   if (gameOver) return setGameOver(view);
 
-  requestAnimationFrame(() => gameLoop(view, bricks, paddle, ball, collision));
+  animationId = requestAnimationFrame(() => gameLoop(view, bricks, paddle, ball, collision));
 }
 
 function startGame(view: CanvasView) {
@@ -109,6 +109,7 @@ function startGame(view: CanvasView) {
 }
 
 function changeLevel(change: string):void {
+  cancelAnimationFrame(animationId);
   if (change=='levelUp'){
 
     if (level + 1 < LEVEL.length) {
@@ -117,10 +118,15 @@ function changeLevel(change: string):void {
       view.drawInfo("This is the final level!")
     }
 
-  } else {
-    if(level>0){ level--; view.drawInfo(`Press Start to play level ${level + 1}`);}
+  } else if (change=='levelDown') {
+    if(level>0){ 
+      level--; view.drawInfo(`Press Start to play level ${level + 1}`);
+    } else {
+      view.drawInfo("This is the first level!")
+    }
   }
-    
+  //startGame(view); stop the game first
+
   
 }
 // Create a new view

@@ -573,10 +573,9 @@ var BRICK_ENERGY = {
   4: 2,
   5: 3 // Purple brick
 
-}; // prettier-ignore
-
+};
 exports.BRICK_ENERGY = BRICK_ENERGY;
-var LEVEL = [[0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 0, 0, 0, 2, 2, 2, 2, 2, 2, 2, 2, 0, 0, 3, 3, 3, 3, 3, 3, 3, 3, 0, 0, 0, 4, 4, 4, 4, 4, 4, 0, 0, 0, 0, 5, 1, 0, 0, 1, 5, 0, 0], [0, 0, 0, 3, 3, 3, 3, 0, 0, 0, 0, 0, 1, 1, 0, 0, 1, 1, 0, 0, 0, 5, 5, 5, 1, 1, 5, 5, 5, 0, 0, 3, 3, 0, 0, 0, 0, 3, 3, 0, 0, 0, 4, 4, 4, 4, 4, 4, 0, 0, 1, 1, 0, 0, 1, 1, 0, 0, 1, 1], [0, 0, 0, 0, 1, 1, 0, 0, 0, 0, 0, 0, 5, 0, 3, 3, 0, 5, 0, 0, 4, 0, 5, 0, 3, 3, 0, 5, 0, 4, 4, 0, 5, 0, 1, 1, 0, 5, 0, 4, 0, 0, 5, 0, 1, 1, 0, 5, 0, 0, 0, 0, 5, 0, 5, 5, 0, 5, 0, 0], [1, 1, 1, 1, 0, 0, 1, 1, 1, 1, 1, 0, 2, 1, 1, 1, 1, 2, 0, 1, 1, 2, 2, 2, 0, 0, 2, 2, 2, 1, 1, 3, 0, 3, 0, 0, 3, 0, 3, 1, 1, 0, 4, 4, 1, 1, 4, 4, 0, 1, 1, 0, 1, 1, 0, 0, 1, 1, 0, 1]];
+var LEVEL = [[0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 0, 0, 0, 2, 2, 2, 2, 2, 2, 2, 2, 0, 0, 3, 3, 3, 3, 3, 3, 3, 3, 0, 0, 0, 4, 4, 4, 4, 4, 4, 0, 0, 0, 0, 5, 1, 0, 0, 1, 5, 0, 0], [0, 0, 0, 3, 3, 3, 3, 0, 0, 0, 0, 0, 1, 1, 0, 0, 1, 1, 0, 0, 0, 5, 5, 5, 1, 1, 5, 5, 5, 0, 0, 3, 3, 0, 0, 0, 0, 3, 3, 0, 0, 0, 4, 4, 4, 4, 4, 4, 0, 0, 1, 1, 0, 0, 1, 1, 0, 0, 1, 1], [0, 0, 0, 0, 1, 1, 0, 0, 0, 0, 0, 0, 5, 0, 3, 3, 0, 5, 0, 0, 4, 0, 5, 0, 3, 3, 0, 5, 0, 4, 4, 0, 5, 0, 1, 1, 0, 5, 0, 4, 0, 0, 5, 0, 1, 1, 0, 5, 0, 0, 0, 0, 5, 0, 5, 5, 0, 5, 0, 0], [1, 1, 1, 1, 0, 0, 1, 1, 1, 1, 1, 0, 2, 1, 1, 1, 1, 2, 0, 1, 1, 2, 2, 2, 0, 0, 2, 2, 2, 1, 1, 3, 0, 3, 0, 0, 3, 0, 3, 1, 1, 0, 4, 4, 1, 1, 4, 4, 0, 1, 1, 0, 1, 1, 0, 0, 1, 1, 0, 1], [0, 0, 0, 4, 4, 4, 4, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 0, 0, 0, 1, 4, 4, 4, 5, 5, 4, 4, 4, 1, 1, 4, 4, 4, 5, 5, 4, 4, 4, 1, 0, 0, 0, 3, 3, 3, 3, 0, 0, 0, 0, 0, 0, 0, 5, 5, 0, 0, 0, 0], [5, 0, 5, 0, 5, 5, 0, 5, 0, 5, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 1, 1, 1, 1, 0, 0, 1, 1, 1, 1, 0, 0, 0, 0, 2, 2, 0, 0, 0, 0, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3], [5, 0, 5, 0, 5, 5, 0, 5, 0, 5, 0, 4, 3, 2, 4, 4, 0, 4, 0, 4, 5, 5, 4, 5, 2, 5, 3, 5, 5, 5, 1, 1, 1, 1, 0, 0, 1, 1, 1, 1, 0, 5, 0, 0, 2, 2, 0, 5, 0, 0, 2, 3, 3, 4, 4, 3, 3, 1, 1, 2]];
 exports.LEVEL = LEVEL;
 },{"./images/brick-red.png":"images/brick-red.png","./images/brick-blue.png":"images/brick-blue.png","./images/brick-green.png":"images/brick-green.png","./images/brick-yellow.png":"images/brick-yellow.png","./images/brick-purple.png":"images/brick-purple.png"}],"sprites/Brick.ts":[function(require,module,exports) {
 "use strict";
@@ -717,6 +716,7 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
 var gameOver = false;
 var score = 0;
 var level = 0;
+var animationId;
 
 function setGameOver(view) {
   view.drawInfo('Game Over!');
@@ -749,12 +749,12 @@ function gameLoop(view, bricks, paddle, ball, collision) {
   } // Game Over when ball leaves playField
 
 
-  if (ball.pos.y > view.canvas.height) gameOver = true; // If game won, set gameOver and display win
+  if (ball.pos.y > view.canvas.height) gameOver = true; // If game is won, set gameOver and display win
 
   if (bricks.length === 0) return setGameWin(view); // Return if gameover and don't run the requestAnimationFrame
 
   if (gameOver) return setGameOver(view);
-  requestAnimationFrame(function () {
+  animationId = requestAnimationFrame(function () {
     return gameLoop(view, bricks, paddle, ball, collision);
   });
 }
@@ -782,6 +782,8 @@ function startGame(view) {
 }
 
 function changeLevel(change) {
+  cancelAnimationFrame(animationId);
+
   if (change == 'levelUp') {
     if (level + 1 < _setup.LEVEL.length) {
       level++;
@@ -789,12 +791,15 @@ function changeLevel(change) {
     } else {
       view.drawInfo("This is the final level!");
     }
-  } else {
+  } else if (change == 'levelDown') {
     if (level > 0) {
       level--;
       view.drawInfo("Press Start to play level " + (level + 1));
+    } else {
+      view.drawInfo("This is the first level!");
     }
-  }
+  } //startGame(view); stop the game first
+
 } // Create a new view
 
 
@@ -829,7 +834,7 @@ var parent = module.bundle.parent;
 if ((!parent || !parent.isParcelRequire) && typeof WebSocket !== 'undefined') {
   var hostname = "" || location.hostname;
   var protocol = location.protocol === 'https:' ? 'wss' : 'ws';
-  var ws = new WebSocket(protocol + '://' + hostname + ':' + "65060" + '/');
+  var ws = new WebSocket(protocol + '://' + hostname + ':' + "49334" + '/');
 
   ws.onmessage = function (event) {
     checkedAssets = {};
