@@ -6,11 +6,11 @@ import { BRICK_IMAGES } from '~/setup';
 
 export class CanvasView {
     public canvas: HTMLCanvasElement;
-    private context: CanvasRenderingContext2D | null; // 
-    private scoreDisplay: HTMLObjectElement | null; // dive where we render the score
+    private context: CanvasRenderingContext2D | null; 
+    private scoreDisplay: HTMLObjectElement | null; // div where we render the score
     private start: HTMLObjectElement | null; // start button
     private info: HTMLObjectElement | null; // info element
-    private levelButtons: NodeListOf<HTMLObjectElement>| null; //Game level button
+    private levelButtons: NodeListOf<HTMLObjectElement>| null; //Game level buttons
 
     constructor(canvasName:string){
         this.canvas = document.querySelector(canvasName) as HTMLCanvasElement;
@@ -43,15 +43,15 @@ export class CanvasView {
         if(this.info) this.info.innerHTML = text;
     }
 
-    drawSprite(brick: Brick | Paddle | Ball):void{
-        if (!brick) return
+    drawSprite(sprite: Brick | Paddle | Ball):void{
+        if (!sprite) return
 
         this.context?.drawImage(
-            brick.image,
-            brick.pos.x,
-            brick.pos.y,
-            brick.width,
-            brick.height
+            sprite.image,
+            sprite.pos.x,
+            sprite.pos.y,
+            sprite.width,
+            sprite.height
         )
     }
 

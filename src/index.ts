@@ -115,15 +115,13 @@ function changeLevel(change: string):void {
     if (level + 1 < LEVEL.length) {
       level++; view.drawInfo(`Press Start to play level ${level + 1}`)
     } else {
-      view.drawInfo("This is the final level!")
+      view.drawInfo(`Just ${level + 1} levels for now ;(`)
     }
 
   } else if (change=='levelDown') {
     if(level>0){ 
       level--; view.drawInfo(`Press Start to play level ${level + 1}`);
-    } else {
-      view.drawInfo("This is the first level!")
-    }
+    } 
   }
   //startGame(view); stop the game first
 

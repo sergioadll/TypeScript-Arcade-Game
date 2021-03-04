@@ -243,11 +243,11 @@ function () {
     if (this.info) this.info.innerHTML = text;
   };
 
-  CanvasView.prototype.drawSprite = function (brick) {
+  CanvasView.prototype.drawSprite = function (sprite) {
     var _a;
 
-    if (!brick) return;
-    (_a = this.context) === null || _a === void 0 ? void 0 : _a.drawImage(brick.image, brick.pos.x, brick.pos.y, brick.width, brick.height);
+    if (!sprite) return;
+    (_a = this.context) === null || _a === void 0 ? void 0 : _a.drawImage(sprite.image, sprite.pos.x, sprite.pos.y, sprite.width, sprite.height);
   };
 
   CanvasView.prototype.drawBricks = function (bricks) {
@@ -789,14 +789,12 @@ function changeLevel(change) {
       level++;
       view.drawInfo("Press Start to play level " + (level + 1));
     } else {
-      view.drawInfo("This is the final level!");
+      view.drawInfo("Just " + (level + 1) + " levels for now ;(");
     }
   } else if (change == 'levelDown') {
     if (level > 0) {
       level--;
       view.drawInfo("Press Start to play level " + (level + 1));
-    } else {
-      view.drawInfo("This is the first level!");
     }
   } //startGame(view); stop the game first
 
@@ -834,7 +832,7 @@ var parent = module.bundle.parent;
 if ((!parent || !parent.isParcelRequire) && typeof WebSocket !== 'undefined') {
   var hostname = "" || location.hostname;
   var protocol = location.protocol === 'https:' ? 'wss' : 'ws';
-  var ws = new WebSocket(protocol + '://' + hostname + ':' + "49334" + '/');
+  var ws = new WebSocket(protocol + '://' + hostname + ':' + "64428" + '/');
 
   ws.onmessage = function (event) {
     checkedAssets = {};

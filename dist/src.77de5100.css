@@ -36,7 +36,10 @@ canvas {
 }
 
 #info {
-  width: 380px;
+  position: absolute;
+  bottom: 325px;
+  text-align: center;
+  width: 1000px;
 }
 
 .level {

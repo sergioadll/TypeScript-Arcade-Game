@@ -1,8 +1,9 @@
 $canvas-width: 1000px;
 $canvas-height: 650px;
+$top-canvas-margin: 50px;
+
 $primary-color: #272727;
 $secondary-color: #ff652f;
-$top-canvas-margin: 50px;
 
 body {
   margin: 0;
@@ -32,7 +33,6 @@ canvas {
 #display {
   position: absolute;
   bottom: -10px;
-  // margin-top: 20px;
   display: flex;
   justify-content: space-between;
   width: $canvas-width;
@@ -42,7 +42,10 @@ canvas {
   width: 150px;
 }
 #info {
-  width: 380px;
+  position: absolute;
+  bottom: $canvas-height/2;
+  text-align: center;
+  width: $canvas-width;
 }
 .level {
   width: 120px;
